@@ -1,6 +1,6 @@
 [project]
 name = "faststeup_ubuntu"
-version = "0.0.0"
+version = "0.0.1-a0"
 description = "A script to set up a fast and efficient development environment on Ubuntu."
 authors = [
     { name = "Marlos Ribeiro", email = "marlos.mgrb@gmail.com" },
