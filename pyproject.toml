@@ -10,4 +10,5 @@ dependencies = []
 dev = [
     "commitizen>=4.6.0",
     "cz-conventional-gitmoji>=0.7.0",
+    "pre-commit>=4.2.0",
 ]
