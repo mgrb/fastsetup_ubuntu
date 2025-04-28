@@ -1,5 +1,5 @@
 def main():
-    print("Hello from dot-files!")
+    print("Config your base OS environment")
 
 
 if __name__ == "__main__":
