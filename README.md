@@ -1,4 +1,6 @@
-# FAST SETUP - Ubuntu
+# FAST SETUP - Ubuntu 🎛️💻🛠️
+
+![Header - My Dotfiles](header.webp)
 
 This repository contains my personal settings to install and setup my development environment on a Linux machine. 🐧⚙️🖥️
 
