@@ -48,7 +48,7 @@ create_directories() {
 # Function to check update and upgrade the system
 check_update_upgrade() {
     echo 'Updating and upgrading the system...'
-    sudo apt update && apt upgrade -y
+    sudo apt update && sudo apt upgrade -y
 }
 
 # install Docker
