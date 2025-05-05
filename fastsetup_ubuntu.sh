@@ -10,7 +10,7 @@ DOWNLOAD_DIR="$HOME/Downloads/fastsetup"
 ZSH_HOME="$USER_HOME/.zsh"
 ZSH_CONFIG="$ZSH_HOME/config"
 ZSH_PLUGINS="$ZSH_HOME/plugins"
-ZSH_PERSONAL_CONFIG_URL="https://raw.githubusercontent.com/andreluizcosta/"
+ZSH_PERSONAL_CONFIG_URL="https://github.com/mgrb/fastsetup_ubuntu/releases/download/0.0.1-a0/zsh_base_config.zip"
 
 FONT_URLS=(
     "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip"
@@ -343,19 +343,6 @@ install_terminal_apps() {
     fi
 }
 
-install_personal_zsh_base_config(){
-    # Check if .zip exist in DOWNLOAD_DIR
-    if [ ! -f "$DOWNLOAD_DIR/zsh_base_config.zip" ]; then
-        echo "Downloading ZSH base config..."
-        wget -O $DOWNLOAD_DIR/zsh_base_config.zip $ZSH_PERSONAL_CONFIG_URL
-        echo "ZSH base config downloaded."
-        unzip $DOWNLOAD_DIR/zsh_base_config.zip -d $USER_HOME
-        echo "ZSH base config unzipped."
-    else
-        echo "ZSH base config already downloaded."
-    fi
-}
-
 unzip_personal_zsh_base_config(){
     # Check if the directory already exists
     if [ ! -d "$ZSH_HOME" ]; then
@@ -415,6 +402,60 @@ install_nerd_fonts(){
 
 }
 
+# Função para solicitar inputs do usuário
+prompt_user_inputs() {
+    echo "Por favor, insira as informações solicitadas:"
+
+    read -p "Digite o nome do usuário do Git (GIT_USER_NAME): " git_user_name
+    if [[ -z "$git_user_name" ]]; then
+        echo "Erro: O nome do usuário não pode ser vazio."
+        exit 1
+    fi
+
+    read -p "Digite o e-mail do Git (GIT_USER_MAIL): " git_user_mail
+    if [[ -z "$git_user_mail" ]]; then
+        echo "Erro: O e-mail não pode ser vazio."
+        exit 1
+    fi
+
+    read -p "Digite a chave de assinatura do Git (GIT_SIGNIN_KEY): " git_signin_key
+    if [[ -z "$git_signin_key" ]]; then
+        echo "Erro: A chave de assinatura não pode ser vazia."
+        exit 1
+    fi
+}
+
+
+install_personal_zsh_base_config() {
+
+    local file="$ZSH_CONFIG/aliases.zsh"
+
+    # Check if .zip exist in DOWNLOAD_DIR
+    if [ ! -f "$DOWNLOAD_DIR/zsh_base_config.zip" ]; then
+        echo "Downloading ZSH base config..."
+        wget -O "$DOWNLOAD_DIR/zsh_base_config.zip" "$ZSH_PERSONAL_CONFIG_URL"
+        echo "ZSH base config downloaded."
+        unzip "$DOWNLOAD_DIR/zsh_base_config.zip" -d "$USER_HOME"
+        echo "ZSH base config unzipped."
+
+        # Verifica se o arquivo existe
+        if [[ ! -f "$file" ]]; then
+            echo "Erro: Arquivo $file não encontrado."
+            exit 1
+        }
+
+        # Substitui as strings usando sed
+        sed -i "s/GIT_USER_NAME/$git_user_name/g" "$file"
+        sed -i "s/GIT_USER_MAIL/$git_user_mail/g" "$file"
+        sed -i "s/GIT_SIGNIN_KEY/$git_signin_key/g" "$file"
+
+        echo "Substituições realizadas com sucesso no arquivo $file."
+
+        echo "Git configurado com nome: $git_user_name, email: $git_user_mail, GPG key: $git_signin_key"
+    else
+        echo "ZSH base config already downloaded."
+    fi
+}
 
 main() {
     # Print the banner
@@ -422,6 +463,9 @@ main() {
 
     # Check if the script is run as root
     check_root_user
+
+    # Prompt user for inputs
+    prompt_user_inputs
 
     # Create necessary directories
     create_directories
@@ -435,9 +479,6 @@ main() {
     # Install Docker
     install_docker
 
-    # Download and unzip personal ZSH base config
-    install_personal_zsh_base_config
-
     # Install Gnome apps
     install_gnome_apps
 
@@ -446,6 +487,9 @@ main() {
 
     # Install JetBrains IDEs
     install_jetbrains_IDEs
+
+    # Download and unzip personal ZSH base config
+    install_personal_zsh_base_config
 }
 
 (return 2> /dev/null) || main
