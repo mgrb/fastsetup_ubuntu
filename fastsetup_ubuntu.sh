@@ -35,15 +35,6 @@ print_bunner() {
 '
 }
 
-# Check if the script is run as root
-check_root_user() {
-    if [ "$(id -u)" != 0 ]; then
-        echo 'Please run the script as root!'
-        echo 'We need to do administrative tasks'
-        exit
-    fi
-}
-
 # Function to create directories
 create_directories() {
     mkdir -p $DOWNLOAD_DIR
@@ -57,7 +48,7 @@ create_directories() {
 # Function to check update and upgrade the system
 check_update_upgrade() {
     echo 'Updating and upgrading the system...'
-    apt update && apt upgrade -y
+    sudo apt update && apt upgrade -y
 }
 
 # install Docker
@@ -460,9 +451,6 @@ install_personal_zsh_base_config() {
 main() {
     # Print the banner
     print_bunner
-
-    # Check if the script is run as root
-    check_root_user
 
     # Prompt user for inputs
     prompt_user_inputs
