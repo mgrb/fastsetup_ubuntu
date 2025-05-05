@@ -442,7 +442,7 @@ install_personal_zsh_base_config() {
         if [[ ! -f "$file" ]]; then
             echo "Erro: Arquivo $file não encontrado."
             exit 1
-        }
+        if
 
         # Substitui as strings usando sed
         sed -i "s/GIT_USER_NAME/$git_user_name/g" "$file"
